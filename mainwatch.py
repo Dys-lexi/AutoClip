@@ -6,6 +6,7 @@ import os
 import queue
 import subprocess
 import sys
+import threading
 import time
 import datetime
 from collections import deque
@@ -66,7 +67,7 @@ with open(CONFIG_PATH) as _f:
 
 WATCH_DIR = _config["watch_dir"]
 SAVE_PATH = _config["save_path"]
-TMP_PATH = "./"
+TEMPPATH = "./"
 FINGERPRINTS_JSON = _config["fingerprints_json"]
 
 SECONDSBEFOREAFTER = _config["seconds_before_after"]
@@ -282,7 +283,8 @@ def saveclip(clipdata,history,refs):
     endrelative = refs[clipdata["fingerprint"]]["beforecliptime"] + refs[clipdata["fingerprint"]]["aftercliptime"] + beginrelative
     print("saving a clip!!!",len(audioclipsneeded),len(videoclipsneeded),endrelative,beginrelative)
     print(json.dumps(list(map(os.path.basename ,audioclipsneeded)),indent=4))
-    actuallysaveclip(audioclipsneeded,videoclipsneeded,clipdata["fingerprint"],endrelative,beginrelative)
+    # actuallysaveclip(audioclipsneeded,videoclipsneeded,clipdata["fingerprint"],endrelative,beginrelative)
+    threading.Thread(target=actuallysaveclip, daemon=True, args=(audioclipsneeded,videoclipsneeded,clipdata["fingerprint"],endrelative,beginrelative)).start()
     return True
 
 def actuallysaveclip(audioclipsneeded,videoclipsneeded,fingerprint,endrelative,beginrelative):
@@ -290,8 +292,9 @@ def actuallysaveclip(audioclipsneeded,videoclipsneeded,fingerprint,endrelative,b
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H-%M-%S")
     outpath = os.path.join(SAVE_PATH, f"{fingerprint} {timestamp}.mp4")
 
-    audio_tmp = os.path.join(TMP_PATH, f".tmp_audio_{timestamp}.mp4")
-    video_tmp = os.path.join(TMP_PATH, f".tmp_video_{timestamp}.mp4")
+    unique = f"{timestamp}_{fingerprint}_{os.getpid()}_{threading.get_ident()}"
+    audio_tmp = os.path.join(TEMPPATH, f".tmp_audio_{unique}.mp4")
+    video_tmp = os.path.join(TEMPPATH, f".tmp_video_{unique}.mp4")
 
     def init_for(chunk_path):
         # chunk-stream{N}-{seq}.m4s -> init-stream{N}.m4s in same dir
@@ -330,9 +333,19 @@ def actuallysaveclip(audioclipsneeded,videoclipsneeded,fingerprint,endrelative,b
          outpath],
         check=True,
     )
-    os.remove(audio_tmp)
-    os.remove(video_tmp)
+    _remove_with_retry(audio_tmp)
+    _remove_with_retry(video_tmp)
     print(f"saved {outpath}")
+
+def _remove_with_retry(path, attempts=10, delay=0.2):
+    for i in range(attempts):
+        try:
+            os.remove(path)
+            return
+        except PermissionError:
+            if i == attempts - 1:
+                raise
+            time.sleep(delay)
 
 def getvideo(path):
     return path.replace("stream1","stream0")
