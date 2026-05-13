@@ -1,0 +1,14 @@
+{
+  "watch_dir": "F:/gamerecoridngs/video",
+  "save_path": "./outputtedclips",
+  "fingerprints_json": "fingerprints.json",
+  "seconds_before_after": {"before": 5, "after": 2},
+  "merge_time": 5,
+  "lockout_time": 5,
+  "n_previous": 4,
+  "merge_window_sec": 5.0,
+  "sample_rate": 44100,
+  "channels": 1,
+  "chunk_prefix": "chunk-stream1-",
+  "init_name": "init-stream1.m4s"
+}

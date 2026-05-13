@@ -1,0 +1,38 @@
+This folder redistributes third-party shared libraries that are bundled
+with this project for convenience. Each file is the unmodified upstream
+binary. The libraries are NOT part of this project's own code and remain
+under their respective licenses.
+
+------------------------------------------------------------------------
+libchromaprint.dll
+------------------------------------------------------------------------
+Project:  Chromaprint (audio fingerprinting library by Lukáš Lalinský)
+Source:   https://github.com/acoustid/chromaprint
+License:  GNU Lesser General Public License v2.1 or later (LGPL-2.1+)
+Notice:   The full text of the LGPL v2.1 is included alongside this
+          NOTICE as LGPL-2.1.txt. Per LGPL section 6, you have the
+          right to obtain the corresponding source code; it can be
+          downloaded from the upstream project URL above.
+
+------------------------------------------------------------------------
+libgcc_s_seh-1.dll
+libgomp-1.dll
+libquadmath-0.dll
+libatomic-1.dll
+libstdc++-6.dll
+------------------------------------------------------------------------
+Project:  GCC runtime libraries (libgcc, libgomp, libquadmath,
+          libatomic, libstdc++) shipped with MinGW-w64
+Source:   https://gcc.gnu.org/    https://www.mingw-w64.org/
+License:  GPL v3 with the GCC Runtime Library Exception
+          (https://www.gnu.org/licenses/gcc-exception-3.1.html)
+Notice:   The Runtime Library Exception permits redistribution of these
+          binaries together with software covered by other licenses,
+          without that software being subject to the GPL.
+
+------------------------------------------------------------------------
+libwinpthread-1.dll
+------------------------------------------------------------------------
+Project:  mingw-w64 winpthreads
+Source:   https://www.mingw-w64.org/
+License:  MIT-style permissive license (see upstream COPYING.MinGW-w64-runtime)
