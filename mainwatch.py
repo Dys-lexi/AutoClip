@@ -66,6 +66,7 @@ with open(CONFIG_PATH) as _f:
 
 WATCH_DIR = _config["watch_dir"]
 SAVE_PATH = _config["save_path"]
+TMP_PATH = "./"
 FINGERPRINTS_JSON = _config["fingerprints_json"]
 
 SECONDSBEFOREAFTER = _config["seconds_before_after"]
@@ -289,8 +290,8 @@ def actuallysaveclip(audioclipsneeded,videoclipsneeded,fingerprint,endrelative,b
     timestamp = datetime.datetime.now().strftime("%y-%m-%d %H-%M-%S")
     outpath = os.path.join(SAVE_PATH, f"{fingerprint} {timestamp}.mp4")
 
-    audio_tmp = os.path.join(SAVE_PATH, f".tmp_audio_{timestamp}.mp4")
-    video_tmp = os.path.join(SAVE_PATH, f".tmp_video_{timestamp}.mp4")
+    audio_tmp = os.path.join(TMP_PATH, f".tmp_audio_{timestamp}.mp4")
+    video_tmp = os.path.join(TMP_PATH, f".tmp_video_{timestamp}.mp4")
 
     def init_for(chunk_path):
         # chunk-stream{N}-{seq}.m4s -> init-stream{N}.m4s in same dir
