@@ -1,10 +1,10 @@
 {
   "Noita": {
+    "aftercliptime": 4,
+    "beforecliptime": 10,
     "duration": 5.802666666666667,
     "fingerprint": "AQAAGbKUPFKAI-gD_Tgm_hr-BOV3OH7w44aOHsfx7PhFXEazCy1-9KRAHYIOY5QA44ggggFJICaGEOgIFAo",
-    "mintimebettweenclipsshouldbedurationofsoundatleast": 10,
-    "maxtimetomergemultiplesounds": 10,
-    "beforecliptime":10,
-    "aftercliptime":4
+    "maxtimetomergemultiplesounds": 0,
+    "mintimebettweenclipsshouldbedurationofsoundatleast": 10
   }
 }

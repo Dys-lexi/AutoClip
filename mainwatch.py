@@ -205,6 +205,7 @@ def process_segment(path, pcm_cache, histories, init_cache, refs,cliptimings,tos
             # print(t,"t!!!")
             print(f"found a match!!! for {ref_name} at {t:.2f}s, loss={ber:.3f}")
             if len(list(filter(lambda x: abs(x - int(t+timer)) < short["mintimebettweenclipsshouldbedurationofsoundatleast"], list(cliptimings[parent])))):
+                print(cliptimings[parent],t+timer)
                 print("not clipping - too soon after most recent clip")
                 cliptimings[parent].append( t+timer)
                 continue
@@ -245,26 +246,39 @@ def saveclip(clipdata,history,refs):
     # at this point, we can clip!
     audioclipsneeded = []
     found = False
-    for i,clip in enumerate(list(history)):
-        if clip["path"] == clipdata["anchorname"]:
-            # print("HEHRHEHRHHE")
-            found = True
-            audioclipsneeded.append(clip["path"])
-        if clip["path"] == clipdata["anchorname2"]:
-            found = False
-            audioclipsneeded.append(clip["path"])
-        elif found:
-            audioclipsneeded.append(clip["path"])
+    if clipdata["anchorname"] == clipdata["anchorname2"]:
+        audioclipsneeded.append(clipdata["anchorname"])
+    else:
+        for i,clip in enumerate(list(history)):
+            if clip["path"] == clipdata["anchorname"]:
+                # print("HEHRHEHRHHE")
+                found = True
+                audioclipsneeded.append(clip["path"])
+            elif clip["path"] == clipdata["anchorname2"]:
+                found = False
+                audioclipsneeded.append(clip["path"])
+            elif found:
+                audioclipsneeded.append(clip["path"])
+    # print("firstclipsneeded",audioclipsneeded)
     endrelative = refs[clipdata["fingerprint"]]["aftercliptime"]+refs[clipdata["fingerprint"]]["maxtimetomergemultiplesounds"]+5 - durations[clipdata["anchorname2"]] + clipdata["timestampinanchor2"]
     for i,clip in enumerate(list(history)[list(durations.keys()).index(clipdata["anchorname2"])+1:]):
-        
+        if endrelative  - clip["duration"]< 0:
+            
+            break
+        endrelative -= clip["duration"]
+    else:
+        print("not enough forward clips")
+        return False
+    endrelative = refs[clipdata["fingerprint"]]["aftercliptime"] - durations[clipdata["anchorname2"]] + clipdata["timestampinanchor2"]
+
+    for i,clip in enumerate(list(history)[list(durations.keys()).index(clipdata["anchorname2"])+1:]):
         audioclipsneeded.append(clip["path"])
         if endrelative  - clip["duration"]< 0:
             
             break
         endrelative -= clip["duration"]
     else:
-        # print("not enough forward clips")
+        print("not enough forward clips")
         return False
     beginrelative = refs[clipdata["fingerprint"]]["beforecliptime"] - clipdata["timestampinanchor"]
 
@@ -416,8 +430,10 @@ def main():
                 tosave[parent][pos] = (not saveclip(clipdata,histories[parent],refs) and clipdata)
             tosave[parent] = list(filter(lambda x: x, tosave.get(parent,[])))
             
+            
 
             timer[parent] = prune_cache(pcm_cache, histories,parent,timer[parent])
+            print("timer:",timer[parent])
             # print("timer",timer)
     except KeyboardInterrupt:
         print("\nstopped")

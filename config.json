@@ -1,6 +1,6 @@
 {
   "watch_dir": "F:/gamerecoridngs/video",
-  "save_path": "Y:/mnt/bigdrives/videopublush",
+  "save_path": "./outputtedclips",
   "fingerprints_json": "fingerprints.json",
   "seconds_before_after": {"before": 5, "after": 2},
   "merge_time": 5,
