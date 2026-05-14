@@ -205,7 +205,7 @@ def process_segment(path, pcm_cache, histories, init_cache, refs,cliptimings,tos
             # print(t,"t!!!")
             print(f"found a match!!! for {ref_name} at {t:.2f}s, loss={ber:.3f}")
             if len(list(filter(lambda x: abs(x - int(t+timer)) < short["mintimebettweenclipsshouldbedurationofsoundatleast"], list(cliptimings[parent])))):
-                print(cliptimings[parent],t+timer)
+                # print(cliptimings[parent],t+timer)
                 print("not clipping - too soon after most recent clip")
                 cliptimings[parent].append( t+timer)
                 continue
@@ -433,7 +433,7 @@ def main():
             
 
             timer[parent] = prune_cache(pcm_cache, histories,parent,timer[parent])
-            print("timer:",timer[parent])
+            # print("timer:",timer[parent])
             # print("timer",timer)
     except KeyboardInterrupt:
         print("\nstopped")
