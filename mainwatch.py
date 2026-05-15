@@ -14,7 +14,7 @@ import functools
 import av
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
-
+import createfingerprints
 
 def _preload_libchromaprint():
     if sys.platform != "win32":
@@ -375,6 +375,7 @@ def prune_cache(pcm_cache, histories,parent,timer):
 
 
 def main():
+    createfingerprints.main()
     os.makedirs(WATCH_DIR, exist_ok=True)
     refs = load_refs()
     print(f"loaded {len(refs)} reference fingerprint(s)")
