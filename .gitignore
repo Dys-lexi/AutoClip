@@ -12,3 +12,4 @@ __pycache__/
 inputwavs/*.wav
 output/
 outputtedclips/*
+*wav
